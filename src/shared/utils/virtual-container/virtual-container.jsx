@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 /*
  * Контейнер отрисовывает видимую область списка и размещает 2 observables для отслеживания смещения видимой области вверх и вниз
- * При смещении расчитывается область списка которую нужно отрисовать
+ * При смещении рассчитывается  область списка которую нужно отрисовать
  * Расчет производится исходя из количества элементов, переданного itemHeight и boundingClientRect
  * */
 
@@ -96,10 +96,11 @@ export const VirtualContainer = ({ list, itemHeight }) => {
 VirtualContainer.propTypes = {
     list: PropTypes.arrayOf(
         PropTypes.exact({
-            id: PropTypes.string,
-            title: PropTypes.string,
-            body: PropTypes.string
+            id: PropTypes.number.isRequired,
+            title: PropTypes.string.isRequired,
+            body: PropTypes.string.isRequired,
+            userId: PropTypes.number.isRequired
         })
-    ),
-    itemHeight: PropTypes.number
+    ).isRequired,
+    itemHeight: PropTypes.number.isRequired
 };
