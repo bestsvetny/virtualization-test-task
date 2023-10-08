@@ -1,7 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { useGetPostsListQuery } from '/src/entities/posts';
 import { useEffect, useRef, useState } from 'react';
-import { VirtualContainer } from '/src/shared/utils';
+import { VirtualContainer } from '../lib/virtual-container/virtual-container.jsx';
 
 export const PostsList = () => {
     const [offset, setOffset] = useState(0);

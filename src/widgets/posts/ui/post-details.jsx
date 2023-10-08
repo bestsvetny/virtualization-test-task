@@ -1,6 +1,6 @@
 import { Button, Flex, Text } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetPostQuery } from '../../../entities/posts/index.js';
+import { useGetPostQuery } from '/src/entities/posts';
 
 export const PostDetails = () => {
     const params = useParams();

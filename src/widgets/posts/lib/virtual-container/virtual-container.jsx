@@ -20,53 +20,51 @@ export const VirtualContainer = ({ list, itemHeight }) => {
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
-            const offset = Math.max(
-                5,
-                Math.floor((Math.abs(entries[0].boundingClientRect.y) - window.innerHeight) / itemHeight)
-            );
-            if (entries[0].isIntersecting) {
-                setTopId((prevState) => prevState + offset);
-                setBotId((prevState) => prevState + offset);
-            }
+            entries.forEach((entry) => {
+                switch (entry.target.id) {
+                    case 'botObs': {
+                        if (entry.isIntersecting) {
+                            const offset = Math.max(
+                                5,
+                                Math.floor((Math.abs(entry.boundingClientRect.y) - window.innerHeight) / itemHeight)
+                            );
+                            setTopId((prevState) => prevState + offset);
+                            setBotId((prevState) => prevState + offset);
+                        }
+                        break;
+                    }
+                    case 'topObs': {
+                        if (entry.isIntersecting && topId > 0) {
+                            const offset = Math.max(
+                                5,
+                                Math.floor(Math.abs(entry.boundingClientRect.y + topId * itemHeight) / itemHeight)
+                            );
+                            setTopId((prevState) => Math.max(prevState - offset, 0));
+                            setBotId((prevState) => Math.max(prevState - offset, 0));
+                        }
+                        break;
+                    }
+                    default:
+                        console.error('No handler for this observable');
+                }
+            });
         });
 
-        const observable = botObs.current;
+        const botCurr = botObs.current;
+        const topCurr = topObs.current;
 
-        if (observable) {
-            observer.observe(observable);
+        if (botCurr && topCurr) {
+            observer.observe(botCurr);
+            observer.observe(topCurr);
         }
 
         return () => {
-            if (observable) {
-                observer.unobserve(observable);
+            if (botCurr && topCurr) {
+                observer.unobserve(botCurr);
+                observer.unobserve(topCurr);
             }
         };
-    }, [botId, itemHeight, list, topId]);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && topId > 0) {
-                const offset = Math.max(
-                    5,
-                    Math.floor(Math.abs(entries[0].boundingClientRect.y + topId * itemHeight) / itemHeight)
-                );
-                setTopId((prevState) => Math.max(prevState - offset, 0));
-                setBotId((prevState) => Math.max(prevState - offset, 0));
-            }
-        });
-
-        const observable = topObs.current;
-
-        if (observable) {
-            observer.observe(observable);
-        }
-
-        return () => {
-            if (observable) {
-                observer.unobserve(observable);
-            }
-        };
-    }, [botId, itemHeight, list, topId]);
+    }, [itemHeight, topId]);
 
     return (
         <Flex flexDirection='column' alignItems='center' height={`${listHeight}px`}>

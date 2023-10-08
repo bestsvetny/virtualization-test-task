@@ -8,7 +8,7 @@ function PostCardComp({ post }) {
 
     return (
         <Flex padding='10px'>
-            <Flex maxWidth='800px' paddingRight='10px'>
+            <Flex width='750px' paddingRight='10px'>
                 <Text whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis'>
                     {post.id}. <b>{post.title}</b>: {post.body}
                 </Text>
