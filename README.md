@@ -1,4 +1,5 @@
 # Тестовое задание Frontend developer
+GitHub Pages: https://bestsvetny.github.io/virtualization-test-task/
 
 Инструменты:
 - React.js
