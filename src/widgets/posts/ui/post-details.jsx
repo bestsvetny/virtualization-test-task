@@ -4,8 +4,8 @@ import { useGetPostQuery } from '../../../entities/posts/index.js';
 
 export const PostDetails = () => {
     const params = useParams();
-    const { data, isLoading } = useGetPostQuery(params.postId);
     const navigate = useNavigate();
+    const { data, isLoading } = useGetPostQuery(params.postId);
     return (
         <>
             {isLoading && <div>loading...</div>}

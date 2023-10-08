@@ -1,8 +1,11 @@
 import React from 'react';
 import { Button, Flex, Text } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-export const PostCard = React.memo(function PostCard({ post }) {
+function PostCardComp({ post }) {
+    const navigate = useNavigate();
+
     return (
         <Flex padding='10px'>
             <Flex maxWidth='800px' paddingRight='10px'>
@@ -11,9 +14,16 @@ export const PostCard = React.memo(function PostCard({ post }) {
                 </Text>
             </Flex>
 
-            <Link to={`/posts/${post.id}`}>
-                <Button>Просмотр</Button>
-            </Link>
+            <Button onClick={() => navigate(`/posts/${post.id}`)}>Просмотр</Button>
         </Flex>
     );
-});
+}
+PostCardComp.propTypes = {
+    post: PropTypes.exact({
+        id: PropTypes.number.isRequired,
+        title: PropTypes.string.isRequired,
+        body: PropTypes.string.isRequired,
+        userId: PropTypes.number.isRequired
+    }).isRequired
+};
+export const PostCard = React.memo(PostCardComp);
