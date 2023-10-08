@@ -10,7 +10,7 @@ export const PostDetails = () => {
         <>
             {isLoading && <div>loading...</div>}
             {data && (
-                <Flex flexDirection='column' gap='10px'>
+                <Flex flexDirection='column' width='800px' gap='10px'>
                     <Text fontSize='2xl' as='h1'>
                         {data.title}
                     </Text>
