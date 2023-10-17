@@ -1,7 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { useGetPostsListQuery } from '/src/entities/posts';
+import { PostCard, useGetPostsListQuery } from '/src/entities/posts';
 import { useEffect, useRef, useState } from 'react';
-import { VirtualContainer } from '../lib/virtual-container/virtual-container.jsx';
+import { VirtualContainer } from '/src/shared/utils/virtual-container.jsx';
 
 export const PostsList = () => {
     const [offset, setOffset] = useState(0);
@@ -34,7 +34,11 @@ export const PostsList = () => {
 
     return (
         <Flex flexDirection='column' alignItems='center'>
-            {isLoading ? 'loading...' : <VirtualContainer list={data} itemHeight={60} />}
+            {isLoading ? (
+                'loading...'
+            ) : (
+                <VirtualContainer list={data} renderItem={(post) => <PostCard post={post} />} itemHeight={60} />
+            )}
             {isFetching && !isLoading && 'fetching...'}
             <Box ref={observerTarget}></Box>
         </Flex>

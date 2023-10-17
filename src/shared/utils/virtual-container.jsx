@@ -1,15 +1,14 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { PostCard } from '/src/entities/posts/index.js';
 import PropTypes from 'prop-types';
 
 /*
- * Контейнер отрисовывает видимую область списка и размещает 2 observables для отслеживания смещения видимой области вверх и вниз
- * При смещении рассчитывается  область списка которую нужно отрисовать
+ * Контейнер рендерит видимую область списка и размещает 2 observables для отслеживания смещения видимой области вверх и вниз
+ * При смещении рассчитывается область списка которую нужно отрендерить
  * Расчет производится исходя из количества элементов, переданного itemHeight и boundingClientRect
  * */
 
-export const VirtualContainer = ({ list, itemHeight }) => {
+export const VirtualContainer = ({ list, renderItem, itemHeight }) => {
     const [topId, setTopId] = useState(0);
     const [botId, setBotId] = useState(Math.floor(window.innerHeight * 1.7) / itemHeight);
 
@@ -70,13 +69,9 @@ export const VirtualContainer = ({ list, itemHeight }) => {
         <Flex flexDirection='column' alignItems='center' height={`${listHeight}px`}>
             <Box ref={topObs} id='topObs' height={`${topId * itemHeight}px`} position='absolute'></Box>
             <Flex flexDirection='column' alignItems='center' transform={`translateY(${topId * itemHeight}px)`}>
-                {list.map((post, index) => {
+                {list.map((props, index) => {
                     if (index <= botId && index >= topId) {
-                        return (
-                            <Box key={post.id}>
-                                <PostCard post={post} />
-                            </Box>
-                        );
+                        return <>{renderItem(props)}</>;
                     }
                 })}
             </Flex>
@@ -92,13 +87,7 @@ export const VirtualContainer = ({ list, itemHeight }) => {
 };
 
 VirtualContainer.propTypes = {
-    list: PropTypes.arrayOf(
-        PropTypes.exact({
-            id: PropTypes.number.isRequired,
-            title: PropTypes.string.isRequired,
-            body: PropTypes.string.isRequired,
-            userId: PropTypes.number.isRequired
-        })
-    ).isRequired,
+    list: PropTypes.array.isRequired,
+    renderItem: PropTypes.func.isRequired,
     itemHeight: PropTypes.number.isRequired
 };
